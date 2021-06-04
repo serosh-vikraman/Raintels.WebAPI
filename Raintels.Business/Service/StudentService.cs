@@ -22,9 +22,11 @@ namespace Raintels.Service
         }
         public async Task<StudentViewModel> CreateStudent(StudentViewModel studentViewModel)
         {
+            studentViewModel.Name = studentViewModel.Name.Encrypt();
             var studentDataModel = mapper.Map<StudentDataModel>(studentViewModel);
             studentDataModel = await studentManager.CreateStudent(studentDataModel);
             studentViewModel = mapper.Map<StudentViewModel>(studentDataModel);
+            studentViewModel.Name = studentViewModel.Name.Decrypt();
             return studentViewModel;
         }
 
@@ -37,6 +39,7 @@ namespace Raintels.Service
         {
             var student = await studentManager.GetStudentDetailsById(studentId);
             var studentViewModel = mapper.Map<StudentViewModel>(student);
+            studentViewModel.Name.Decrypt();
             return studentViewModel;
         }
 
