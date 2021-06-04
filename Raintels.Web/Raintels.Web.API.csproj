@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Raintels.Business\Raintels.Service.csproj" />
     <ProjectReference Include="..\Raintels.Core\Raintels.Core.csproj" />
     <ProjectReference Include="..\Raintels.Entity\Raintels.Entity.csproj" />
