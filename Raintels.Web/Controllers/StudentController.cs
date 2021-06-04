@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,15 +24,59 @@ namespace Raintels.Web.API.Controllers
         }
 
         [HttpGet("getall")]
-        public IEnumerable<StudentViewModel> GetAllStudents()
+        public ResponseDataModel<IEnumerable<StudentViewModel>> GetAllStudents()
         {
-            return studentService.GetStudents().Result;
+            try
+            {
+                var students = studentService.GetStudents().Result;
+                var response = new ResponseDataModel<IEnumerable<StudentViewModel>>()
+                {
+                    Status = HttpStatusCode.OK,
+                    Response = students
+                };
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDataModel<IEnumerable<StudentViewModel>>()
+                {
+                    Status = HttpStatusCode.InternalServerError,
+                    Response = null,
+                    ErrorMessage = new ErrorResponse()
+                    {
+                        Message = ex.Message
+                    }
+
+                };
+            }
         }
 
         [HttpGet("getbyid/{studentId}")]
-        public StudentViewModel GetStudent(int studentId)
+        public ResponseDataModel<StudentViewModel> GetStudent(int studentId)
         {
-            return studentService.GetStudentDetailsById(studentId).Result;
+            try
+            {
+                var result = studentService.GetStudentDetailsById(studentId).Result;
+                var response = new ResponseDataModel<StudentViewModel>()
+                {
+                    Status = HttpStatusCode.OK,
+                    Response = result
+                };
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDataModel<StudentViewModel>()
+                {
+                    Status = HttpStatusCode.InternalServerError,
+                    Response = null,
+                    ErrorMessage = new ErrorResponse()
+                    {
+                        Message = ex.Message
+                    }
+
+                };
+            }
         }
 
         [HttpPost("savestudent")]
